@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import os
+import sys
 import threading
+import webbrowser
 from collections import deque
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -94,7 +96,7 @@ class QueueManager:
             raise KeyError(f"La mesa {desk_id} no existe")
 
 
-ROOT_DIR = Path(__file__).resolve().parents[1]
+ROOT_DIR = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[1]))
 FRONTEND_DIST = ROOT_DIR / "frontend" / "dist" / "frontend" / "browser"
 
 
@@ -167,5 +169,7 @@ def create_app(manager: QueueManager | None = None) -> tuple[Flask, SocketIO]:
 app, socketio = create_app()
 
 if __name__ == "__main__":
+    if getattr(sys, "frozen", False):
+        threading.Timer(1.2, lambda: webbrowser.open("http://127.0.0.1:5000")).start()
     socketio.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", "5000")))
 

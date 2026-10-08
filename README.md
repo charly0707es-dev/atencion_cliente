@@ -14,7 +14,13 @@ Sistema local de turnos para cuatro mesas. Los primeros cuatro clientes se asign
 
 ## Ejecutar
 
-En Linux o macOS:
+### Windows, sin instalar ni escribir comandos
+
+Descarga `AtencionCliente.exe` desde la sección **Releases** de GitHub y haz doble clic. El programa abre automáticamente `http://localhost:5000` en el navegador. Para apagarlo, cierra la ventana negra del programa.
+
+Windows puede mostrar la advertencia de SmartScreen porque el archivo no tiene una firma comercial. En ese caso selecciona **Más información** y después **Ejecutar de todas formas**.
+
+### Linux o macOS
 
 ```bash
 chmod +x start.sh
