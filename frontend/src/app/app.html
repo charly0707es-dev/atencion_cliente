@@ -1,0 +1,40 @@
+<main class="app-shell">
+  <header class="topbar">
+    <div class="brand-mark">AT</div><div><p class="eyebrow">CENTRO DE SERVICIO</p><h1>Atención a clientes</h1></div>
+    <div class="connection" [class.offline]="!connected()"><span></span>{{ connected() ? 'En tiempo real' : 'Reconectando' }}</div>
+  </header>
+  @if (message()) { <div class="toast" [class.error]="message()?.type === 'error'">{{ message()?.text }}</div> }
+  <section class="hero">
+    <div><p class="eyebrow">RECEPCIÓN</p><h2>Entrega el siguiente turno</h2><p>El sistema elegirá automáticamente una mesa disponible o agregará al cliente a la fila.</p></div>
+    <button class="primary-action" (click)="createTicket()" [disabled]="busy()"><span class="plus">+</span><span><small>SIGUIENTE TURNO</small><strong>A{{ paddedNextTicket() }}</strong></span></button>
+  </section>
+  <section class="metrics">
+    <article><span>Esperando</span><strong>{{ state().waiting.length }}</strong><small>personas en fila</small></article>
+    <article><span>En atención</span><strong>{{ occupiedDeskCount() }}</strong><small>de 4 mesas</small></article>
+    <article><span>Atendidos</span><strong>{{ state().completed_count }}</strong><small>en esta sesión</small></article>
+  </section>
+  <section class="section-block">
+    <div class="section-heading"><div><p class="eyebrow">OPERACIÓN</p><h2>Estado de las mesas</h2></div><p>Finaliza una atención para llamar automáticamente al primer turno de la fila.</p></div>
+    <div class="desk-grid">
+      @for (desk of state().desks; track desk.id) {
+        <article class="desk-card" [class.available]="!desk.ticket">
+          <div class="desk-header"><span>MESA {{ desk.id }}</span><span class="status-dot">{{ desk.ticket ? 'Atendiendo' : 'Disponible' }}</span></div>
+          @if (desk.ticket) {
+            <div class="ticket-number">A{{ pad(desk.ticket.number) }}</div><p>Turno en atención</p>
+            <button (click)="finishDesk(desk.id)" [disabled]="busy()">Finalizar atención</button>
+          } @else {
+            <div class="empty-icon">✓</div><p>Lista para recibir cliente</p><button disabled>Sin turno asignado</button>
+          }
+        </article>
+      }
+    </div>
+  </section>
+  <section class="queue-panel">
+    <div class="section-heading compact"><div><p class="eyebrow">FILA DE ESPERA</p><h2>Próximos turnos</h2></div><span class="queue-count">{{ state().waiting.length }} en espera</span></div>
+    @if (state().waiting.length) {
+      <div class="waiting-list">@for (ticket of state().waiting; track ticket.number; let position = $index) { <div><span>{{ position + 1 }}</span><strong>A{{ pad(ticket.number) }}</strong></div> }</div>
+    } @else { <div class="empty-queue"><span>✓</span><p>No hay clientes esperando</p></div> }
+  </section>
+  <footer><span>Los datos se guardan únicamente durante esta sesión.</span><button class="reset" (click)="reset()" [disabled]="busy()">Reiniciar jornada</button></footer>
+</main>
+
