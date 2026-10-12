@@ -19,6 +19,7 @@ Sistema local de turnos para cuatro mesas. Los primeros cuatro clientes se asign
 - `frontend/public/config.js` contiene la dirección pública del backend.
 
 El plan gratuito de Render puede apagar el backend tras un periodo sin actividad. El primer acceso posterior puede tardar cerca de un minuto y, como el estado vive en memoria, los turnos se reinician cuando Render reinicia el servicio.
+El servicio utiliza un único proceso Gunicorn con múltiples hilos para conservar un solo estado compartido y admitir las conexiones en tiempo real.
 
 ## Ejecutar
 
