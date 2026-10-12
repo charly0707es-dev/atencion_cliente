@@ -14,7 +14,7 @@ Sistema local de turnos para cuatro mesas. Los primeros cuatro clientes se asign
 
 ## Despliegue web
 
-- `vercel.json` publica el frontend Angular en Vercel.
+- `frontend/vercel.json` publica el frontend Angular en Vercel.
 - `render.yaml` publica el backend Flask-SocketIO en Render.
 - `frontend/public/config.js` contiene la dirección pública del backend.
 
