@@ -12,6 +12,14 @@ Sistema local de turnos para cuatro mesas. Los primeros cuatro clientes se asign
 - Monitor público y controles de operación en una sola pantalla.
 - Estado únicamente en memoria: al reiniciar el servidor los turnos comienzan desde 1.
 
+## Despliegue web
+
+- `vercel.json` publica el frontend Angular en Vercel.
+- `render.yaml` publica el backend Flask-SocketIO en Render.
+- `frontend/public/config.js` contiene la dirección pública del backend.
+
+El plan gratuito de Render puede apagar el backend tras un periodo sin actividad. El primer acceso posterior puede tardar cerca de un minuto y, como el estado vive en memoria, los turnos se reinician cuando Render reinicia el servicio.
+
 ## Ejecutar
 
 ### Windows, sin instalar ni escribir comandos

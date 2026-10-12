@@ -9,6 +9,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 
 from flask import Flask, jsonify, request, send_from_directory
+from flask_cors import CORS
 from flask_socketio import SocketIO
 
 
@@ -104,7 +105,18 @@ def create_app(manager: QueueManager | None = None) -> tuple[Flask, SocketIO]:
     app = Flask(__name__, static_folder=None)
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "local-development")
     queue_manager = manager or QueueManager()
-    socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")
+    allowed_origins = os.environ.get("CORS_ALLOWED_ORIGINS", "*")
+    cors_origins: str | list[str] = (
+        "*"
+        if allowed_origins == "*"
+        else [origin.strip() for origin in allowed_origins.split(",") if origin.strip()]
+    )
+    CORS(app, resources={r"/api/*": {"origins": cors_origins}})
+    socketio = SocketIO(
+        app,
+        cors_allowed_origins=cors_origins,
+        async_mode="threading",
+    )
 
     def publish(state: dict) -> None:
         socketio.emit("queue_updated", state)

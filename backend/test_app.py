@@ -55,3 +55,11 @@ def test_api_full_flow():
     assert reset.status_code == 200
     assert reset.get_json()["next_ticket"] == 1
 
+
+def test_api_allows_the_deployed_frontend_origin():
+    flask_app, _ = create_app(QueueManager())
+    response = flask_app.test_client().get(
+        "/api/health", headers={"Origin": "https://example.vercel.app"}
+    )
+    assert response.headers["Access-Control-Allow-Origin"] == "https://example.vercel.app"
+
